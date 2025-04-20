@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import br.com.software.epv.srv.crud.people.entities.Address;
 import br.com.software.epv.srv.crud.people.repositories.interfaces.AddressRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 
@@ -116,25 +117,62 @@ public class AddressRepositoryImpl implements AddressRepository {
 
 	@Override
 	public List<Address> listAllAddress() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			// Mudar ordem para crescente
+			String jpql = "SELECT a FROM Address a ORDER BY a.addressId";
+			return em.createQuery(jpql, Address.class).getResultList();
+		} catch (Exception e) {
+			throw new Exception("Erro ao listar todos os endereços", e);
+		}
 	}
 
 	@Override
 	public Address readByIdAddress(Long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+
+		try {
+			Address address = em.find(Address.class, id);
+			if (address == null) {
+				throw new EntityNotFoundException("Endereço com ID " + id + " não encontrado");
+			}
+			return address;
+		} catch (Exception e) {
+			throw new Exception("Erro ao buscar endereço por ID", e);
+		}
 	}
 
 	@Override
-	public Address readByStreet(String street) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Address> listStreet(String street) throws Exception {
+		if (street == null || street.trim().isEmpty()) {
+			throw new IllegalArgumentException("Nome da rua não encontrado");
+		}
+
+		try {
+			String jpql = "SELECT a FROM Address a WHERE LOWER(a.street) LIKE LOWER(:street) ORDER BY a.street";
+			return em.createQuery(jpql, Address.class).setParameter("street", "%" + street + "%").getResultList();
+		} catch (Exception e) {
+			throw new Exception("Erro ao buscar endereços por rua", e);
+		}
 	}
 
 	@Override
-	public Address readByZipCode(Long zipCode) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Address> listZipCode(String zipCode) throws Exception {
+
+		try {
+			String jpql = "SELECT a FROM Address a WHERE a.zipCode = :zipCode ORDER BY a.street";
+			return em.createQuery(jpql, Address.class).setParameter("zipCode", zipCode).getResultList();
+		} catch (Exception e) {
+			throw new Exception("Erro ao buscar o código do País", e);
+		}
 	}
+
+	@Override
+	public long count() throws Exception {
+		try {
+			String jpql = "SELECT COUNT(a) FROM Address a";
+			return em.createQuery(jpql, Long.class).getSingleResult();
+		} catch (Exception e) {
+			throw new Exception("Erro ao contar endereços", e);
+		}
+	}
+
 }
