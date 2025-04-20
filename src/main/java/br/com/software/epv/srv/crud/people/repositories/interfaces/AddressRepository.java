@@ -16,7 +16,9 @@ public interface AddressRepository {
 
 	Address readByIdAddress(Long id) throws Exception;
 
-	Address readByStreet(String street) throws Exception;
+	List<Address> listStreet(String street) throws Exception;
 
-	Address readByZipCode(Long zipCode) throws Exception;
+	List<Address> listZipCode(String zipCode) throws Exception;
+	
+	long count() throws Exception;
 }
