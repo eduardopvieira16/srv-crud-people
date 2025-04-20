@@ -81,8 +81,37 @@ public class AddressRepositoryImpl implements AddressRepository {
 
 	@Override
 	public Address deleteAddress(Address address) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if (address == null) {
+			throw new IllegalArgumentException("Endereço não pode ser nulo");
+		}
+
+		if (address.getAddressId() == null) {
+			throw new IllegalArgumentException("ID do endereço não pode ser nulo para exclusão");
+		}
+
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+
+			Address addressToDelete = em.find(Address.class, address.getAddressId());
+			if (addressToDelete == null) {
+				throw new IllegalArgumentException("Endereço com ID " + address.getAddressId() + " não encontrado");
+			}
+
+			em.remove(addressToDelete);
+			transaction.commit();
+
+			return addressToDelete;
+		} catch (Exception e) {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			throw new RuntimeException("Erro ao excluir o endereço", e);
+		} finally {
+			if (transaction.isActive() && !transaction.getRollbackOnly()) {
+				transaction.rollback();
+			}
+		}
 	}
 
 	@Override
