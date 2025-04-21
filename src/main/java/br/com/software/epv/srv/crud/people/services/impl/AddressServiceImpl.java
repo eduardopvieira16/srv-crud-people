@@ -3,11 +3,13 @@ package br.com.software.epv.srv.crud.people.services.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.software.epv.srv.crud.people.entities.Address;
 import br.com.software.epv.srv.crud.people.repositories.impl.AddressRepositoryImpl;
 import br.com.software.epv.srv.crud.people.services.interfaces.AddressService;
 
+@Service
 public class AddressServiceImpl implements AddressService {
 
 	@Autowired
