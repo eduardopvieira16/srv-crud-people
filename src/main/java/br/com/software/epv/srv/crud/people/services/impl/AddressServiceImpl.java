@@ -55,7 +55,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public long count() throws Exception {
-		return addressRepository.count();
+		return addressRepository.countAddress();
 	}
 
 }

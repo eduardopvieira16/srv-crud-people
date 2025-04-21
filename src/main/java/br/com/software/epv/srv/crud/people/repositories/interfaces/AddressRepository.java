@@ -5,7 +5,6 @@ import java.util.List;
 import br.com.software.epv.srv.crud.people.entities.Address;
 
 public interface AddressRepository {
-
 	Address createAddress(Address address) throws Exception;
 
 	Address updateAddress(Address address) throws Exception;
@@ -19,6 +18,6 @@ public interface AddressRepository {
 	List<Address> listStreet(String street) throws Exception;
 
 	List<Address> listZipCode(String zipCode) throws Exception;
-	
-	long count() throws Exception;
+
+	long countAddress() throws Exception;
 }
