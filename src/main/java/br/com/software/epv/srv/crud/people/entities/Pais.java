@@ -11,7 +11,7 @@ public class Pais {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_pais")
-	private Integer id;
+	private Long id;
 
 	@Column(nullable = false, length = 100)
 	private String pais;
@@ -22,18 +22,18 @@ public class Pais {
 	public Pais() {
 	}
 
-	public Pais(Integer id, String pais, String codigoTelefone) {
+	public Pais(Long id, String pais, String codigoTelefone) {
 		super();
 		this.id = id;
 		this.pais = pais;
 		this.codigoTelefone = codigoTelefone;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -11,7 +11,7 @@ public class Bairro {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_bairro")
-	private Integer id;
+	private Long id;
 
 	@Column(nullable = false, length = 100)
 	private String bairro;
@@ -22,18 +22,18 @@ public class Bairro {
 	public Bairro() {
 	}
 
-	public Bairro(Integer id, String bairro, String cep) {
+	public Bairro(Long id, String bairro, String cep) {
 		super();
 		this.id = id;
 		this.bairro = bairro;
 		this.cep = cep;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

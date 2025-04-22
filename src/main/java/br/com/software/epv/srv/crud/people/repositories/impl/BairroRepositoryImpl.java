@@ -4,41 +4,38 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.software.epv.srv.crud.people.entities.Address;
-import br.com.software.epv.srv.crud.people.repositories.interfaces.AddressRepository;
+import br.com.software.epv.srv.crud.people.entities.Bairro;
+import br.com.software.epv.srv.crud.people.repositories.interfaces.BairroRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 
 @Repository
-public class AddressRepositoryImpl implements AddressRepository {
+public class BairroRepositoryImpl implements BairroRepository {
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Override
-	public Address createAddress(Address address) throws Exception {
-		if (address == null) {
-			throw new IllegalArgumentException("Endereço não pode ser nulo");
+	public Bairro createBairro(Bairro bairro) throws Exception {
+		if (bairro == null) {
+			throw new IllegalArgumentException("Bairro não pode ser nulo");
+		}
+		if (bairro.getId() != null) {
+			throw new IllegalArgumentException("O ID do bairro deve ser nulo ao criar um novo registro");
 		}
 
 		EntityTransaction transaction = em.getTransaction();
 		try {
 			transaction.begin();
-
-			if (address.getAddressId() != null) {
-				throw new IllegalArgumentException("Para criar um novo endereço, o ID deve ser nulo");
-			}
-
-			em.persist(address);
+			em.persist(bairro);
 			transaction.commit();
-			return address;
+			return bairro;
 		} catch (Exception e) {
-			if (transaction.isActive()) {
+			if (transaction.isActive())
 				transaction.rollback();
-			}
-			throw new RuntimeException("Erro ao criar o endereço", e);
+			throw new RuntimeException("Erro ao criar o bairro", e);
 		} finally {
 			if (transaction.isActive() && !transaction.getRollbackOnly()) {
 				transaction.rollback();
@@ -47,32 +44,28 @@ public class AddressRepositoryImpl implements AddressRepository {
 	}
 
 	@Override
-	public Address updateAddress(Address address) throws Exception {
-		if (address == null) {
-			throw new IllegalArgumentException("Endereço não pode ser nulo");
+	public Bairro updateBairro(Bairro bairro) throws Exception {
+		if (bairro == null) {
+			throw new IllegalArgumentException("Bairro não pode ser nulo");
 		}
-
-		if (address.getAddressId() == null) {
-			throw new IllegalArgumentException("ID do endereço não pode ser nulo para atualização");
+		if (bairro.getId() == null) {
+			throw new IllegalArgumentException("O ID do bairro é obrigatório para atualização");
 		}
 
 		EntityTransaction transaction = em.getTransaction();
 		try {
 			transaction.begin();
-
-			Address existing = em.find(Address.class, address.getAddressId());
-			if (existing == null) {
-				throw new IllegalArgumentException("Endereço com ID " + address.getAddressId() + " não encontrado");
+			Bairro existente = em.find(Bairro.class, bairro.getId());
+			if (existente == null) {
+				throw new IllegalArgumentException("Bairro com ID " + bairro.getId() + " não encontrado");
 			}
-
-			Address updatedAddress = em.merge(address);
+			Bairro atualizado = em.merge(bairro);
 			transaction.commit();
-			return updatedAddress;
+			return atualizado;
 		} catch (Exception e) {
-			if (transaction.isActive()) {
+			if (transaction.isActive())
 				transaction.rollback();
-			}
-			throw new RuntimeException("Erro ao atualizar o endereço", e);
+			throw new RuntimeException("Erro ao atualizar o bairro", e);
 		} finally {
 			if (transaction.isActive() && !transaction.getRollbackOnly()) {
 				transaction.rollback();
@@ -81,33 +74,28 @@ public class AddressRepositoryImpl implements AddressRepository {
 	}
 
 	@Override
-	public Address deleteAddress(Address address) throws Exception {
-		if (address == null) {
-			throw new IllegalArgumentException("Endereço não pode ser nulo");
+	public Bairro deleteBairro(Bairro bairro) throws Exception {
+		if (bairro == null) {
+			throw new IllegalArgumentException("Bairro não pode ser nulo");
 		}
-
-		if (address.getAddressId() == null) {
-			throw new IllegalArgumentException("ID do endereço não pode ser nulo para exclusão");
+		if (bairro.getId() == null) {
+			throw new IllegalArgumentException("O ID do bairro é obrigatório para exclusão");
 		}
 
 		EntityTransaction transaction = em.getTransaction();
 		try {
 			transaction.begin();
-
-			Address addressToDelete = em.find(Address.class, address.getAddressId());
-			if (addressToDelete == null) {
-				throw new IllegalArgumentException("Endereço com ID " + address.getAddressId() + " não encontrado");
+			Bairro existente = em.find(Bairro.class, bairro.getId());
+			if (existente == null) {
+				throw new IllegalArgumentException("Bairro com ID " + bairro.getId() + " não encontrado");
 			}
-
-			em.remove(addressToDelete);
+			em.remove(existente);
 			transaction.commit();
-
-			return addressToDelete;
+			return existente;
 		} catch (Exception e) {
-			if (transaction.isActive()) {
+			if (transaction.isActive())
 				transaction.rollback();
-			}
-			throw new RuntimeException("Erro ao excluir o endereço", e);
+			throw new RuntimeException("Erro ao excluir o bairro", e);
 		} finally {
 			if (transaction.isActive() && !transaction.getRollbackOnly()) {
 				transaction.rollback();
@@ -116,61 +104,64 @@ public class AddressRepositoryImpl implements AddressRepository {
 	}
 
 	@Override
-	public List<Address> listAllAddress() throws Exception {
+	public List<Bairro> listAllBairro() throws Exception {
 		try {
-			String jpql = "SELECT address FROM Address address ORDER BY address.street asc";
-			return em.createQuery(jpql, Address.class).getResultList();
+			String jpql = "SELECT bairro FROM Bairro bairro ORDER BY bairro.bairro ASC";
+			return em.createQuery(jpql, Bairro.class).getResultList();
 		} catch (Exception e) {
-			throw new Exception("Erro ao listar todos os endereços", e);
+			throw new Exception("Erro ao listar todos os bairros", e);
 		}
 	}
 
 	@Override
-	public Address readByIdAddress(Long id) throws Exception {
-
+	public Bairro readByIdBairro(Long id) throws Exception {
+		if (id == null) {
+			throw new IllegalArgumentException("ID do bairro não pode ser nulo");
+		}
 		try {
-			Address address = em.find(Address.class, id);
-			if (address == null) {
-				throw new EntityNotFoundException("Endereço com ID " + id + " não encontrado");
+			Bairro bairro = em.find(Bairro.class, id);
+			if (bairro == null) {
+				throw new EntityNotFoundException("Bairro com ID " + id + " não encontrado");
 			}
-			return address;
+			return bairro;
 		} catch (Exception e) {
-			throw new Exception("Erro ao buscar endereço por ID", e);
+			throw new Exception("Erro ao buscar bairro por ID", e);
 		}
 	}
 
 	@Override
-	public List<Address> listStreet(String street) throws Exception {
-		if (street == null || street.trim().isEmpty()) {
-			throw new IllegalArgumentException("Nome da rua não encontrado");
+	public List<Bairro> listBairro(String nome) throws Exception {
+		if (nome == null || nome.trim().isEmpty()) {
+			throw new IllegalArgumentException("Nome do bairro não pode ser vazio");
 		}
-
 		try {
-			String jpql = "SELECT address FROM Address address WHERE LOWER(address.street) LIKE LOWER(:street) ORDER BY address.street asc";
-			return em.createQuery(jpql, Address.class).setParameter("street", "%" + street + "%").getResultList();
+			String jpql = "SELECT bairro FROM Bairro bairro WHERE LOWER(bairro.nome) LIKE LOWER(:nome) ORDER BY bairro.bairro ASC";
+			return em.createQuery(jpql, Bairro.class).setParameter("nome", "%" + nome + "%").getResultList();
 		} catch (Exception e) {
-			throw new Exception("Erro ao buscar endereços por rua", e);
+			throw new Exception("Erro ao buscar bairros por nome", e);
 		}
 	}
 
 	@Override
-	public List<Address> listZipCode(String zipCode) throws Exception {
-
+	public List<Bairro> listCep(String cep) throws Exception {
+		if (cep == null || cep.trim().isEmpty()) {
+			throw new IllegalArgumentException("CEP não pode ser vazio");
+		}
 		try {
-			String jpql = "SELECT address FROM Address address WHERE address.zipCode = :zipCode ORDER BY address.street asc";
-			return em.createQuery(jpql, Address.class).setParameter("zipCode", zipCode).getResultList();
+			String jpql = "SELECT bairro FROM Bairro bairro WHERE bairro.cep = :cep ORDER BY bairro.bairro ASC";
+			return em.createQuery(jpql, Bairro.class).setParameter("cep", cep).getResultList();
 		} catch (Exception e) {
-			throw new Exception("Erro ao buscar o código do País", e);
+			throw new Exception("Erro ao buscar bairros por CEP", e);
 		}
 	}
 
 	@Override
-	public long countAddress() throws Exception {
+	public long countBairro() throws Exception {
 		try {
-			String jpql = "SELECT COUNT(address) FROM Address address";
+			String jpql = "SELECT COUNT(bairro) FROM Bairro bairro";
 			return em.createQuery(jpql, Long.class).getSingleResult();
 		} catch (Exception e) {
-			throw new Exception("Erro ao contar endereços", e);
+			throw new Exception("Erro ao contar bairros", e);
 		}
 	}
 }

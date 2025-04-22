@@ -11,7 +11,7 @@ public class Endereco {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_endereco")
-	private Integer id;
+	private Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "id_bairro")
@@ -35,7 +35,7 @@ public class Endereco {
 	public Endereco() {
 	}
 
-	public Endereco(Integer id, Bairro bairro, Cidade cidade, Estado estado, Pais pais, String logradouro) {
+	public Endereco(Long id, Bairro bairro, Cidade cidade, Estado estado, Pais pais, String logradouro) {
 		super();
 		this.id = id;
 		this.bairro = bairro;
@@ -45,11 +45,11 @@ public class Endereco {
 		this.logradouro = logradouro;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
