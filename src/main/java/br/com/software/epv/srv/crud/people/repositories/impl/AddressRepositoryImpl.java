@@ -118,8 +118,7 @@ public class AddressRepositoryImpl implements AddressRepository {
 	@Override
 	public List<Address> listAllAddress() throws Exception {
 		try {
-			// Mudar ordem para crescente
-			String jpql = "SELECT a FROM Address a ORDER BY a.addressId";
+			String jpql = "SELECT address FROM Address address ORDER BY address.street asc";
 			return em.createQuery(jpql, Address.class).getResultList();
 		} catch (Exception e) {
 			throw new Exception("Erro ao listar todos os endereços", e);
@@ -147,7 +146,7 @@ public class AddressRepositoryImpl implements AddressRepository {
 		}
 
 		try {
-			String jpql = "SELECT a FROM Address a WHERE LOWER(a.street) LIKE LOWER(:street) ORDER BY a.street";
+			String jpql = "SELECT address FROM Address address WHERE LOWER(address.street) LIKE LOWER(:street) ORDER BY address.street asc";
 			return em.createQuery(jpql, Address.class).setParameter("street", "%" + street + "%").getResultList();
 		} catch (Exception e) {
 			throw new Exception("Erro ao buscar endereços por rua", e);
@@ -158,7 +157,7 @@ public class AddressRepositoryImpl implements AddressRepository {
 	public List<Address> listZipCode(String zipCode) throws Exception {
 
 		try {
-			String jpql = "SELECT a FROM Address a WHERE a.zipCode = :zipCode ORDER BY a.street";
+			String jpql = "SELECT address FROM Address address WHERE address.zipCode = :zipCode ORDER BY address.street asc";
 			return em.createQuery(jpql, Address.class).setParameter("zipCode", zipCode).getResultList();
 		} catch (Exception e) {
 			throw new Exception("Erro ao buscar o código do País", e);
@@ -166,13 +165,12 @@ public class AddressRepositoryImpl implements AddressRepository {
 	}
 
 	@Override
-	public long count() throws Exception {
+	public long countAddress() throws Exception {
 		try {
-			String jpql = "SELECT COUNT(a) FROM Address a";
+			String jpql = "SELECT COUNT(address) FROM Address address";
 			return em.createQuery(jpql, Long.class).getSingleResult();
 		} catch (Exception e) {
 			throw new Exception("Erro ao contar endereços", e);
 		}
 	}
-
 }

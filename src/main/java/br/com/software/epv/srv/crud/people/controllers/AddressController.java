@@ -19,7 +19,6 @@ public class AddressController {
 
 	@GetMapping("/all")
 	public List<Address> listAll() throws Exception {
-
 		try {
 			return addressService.listAllAddress();
 		} catch (Exception e) {
