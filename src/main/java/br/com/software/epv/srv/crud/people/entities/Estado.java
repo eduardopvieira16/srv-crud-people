@@ -11,7 +11,7 @@ public class Estado {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_estado")
-	private Integer id;
+	private Long id;
 
 	@Column(nullable = false, length = 100)
 	private String estado;
@@ -28,7 +28,7 @@ public class Estado {
 	public Estado() {
 	}
 
-	public Estado(Integer id, String estado, String uf, String codigoIbge, String regiao) {
+	public Estado(Long id, String estado, String uf, String codigoIbge, String regiao) {
 		super();
 		this.id = id;
 		this.estado = estado;
@@ -37,11 +37,11 @@ public class Estado {
 		this.regiao = regiao;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

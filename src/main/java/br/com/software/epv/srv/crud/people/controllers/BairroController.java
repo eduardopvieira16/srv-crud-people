@@ -7,20 +7,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.software.epv.srv.crud.people.entities.Address;
-import br.com.software.epv.srv.crud.people.services.impl.AddressServiceImpl;
+import br.com.software.epv.srv.crud.people.entities.Bairro;
+import br.com.software.epv.srv.crud.people.services.impl.BairroServiceImpl;
 
 @RestController
-@RequestMapping("/v1/address")
-public class AddressController {
+@RequestMapping("/v1/bairro")
+public class BairroController {
 
 	@Autowired
-	private AddressServiceImpl addressService;
+	private BairroServiceImpl bairroService;
 
 	@GetMapping("/all")
-	public List<Address> listAll() throws Exception {
+	public List<Bairro> listAll() throws Exception {
 		try {
-			return addressService.listAllAddress();
+			return bairroService.listAllBairros();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
